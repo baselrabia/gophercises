@@ -17,9 +17,15 @@ func main() {
 	mux := defaultMux()
 
 	// Build the MapHandler using the mux as the fallback
-	pathsToUrls := map[string]string{
-		"/urlshort-godoc": "https://godoc.org/github.com/gophercises/urlshort",
-		"/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
+	//pathsToUrls := map[string]string{
+	//	"/urlshort-godoc": "https://godoc.org/github.com/gophercises/urlshort",
+	//	"/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
+	//}
+
+	pathsToUrls, err := urlshort.LoadFromDB()
+	if err != nil {
+		fmt.Printf("failed to get data from DB : %v\n", err)
+		return
 	}
 	mapHandler := urlshort.MapHandler(pathsToUrls, mux)
 
