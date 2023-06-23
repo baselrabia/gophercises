@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"net/http"
 	"os"
+	texttemplate "text/template"
 )
 
 type Story map[string]struct {
@@ -19,7 +20,10 @@ type Story map[string]struct {
 }
 
 func main() {
-	flagStoryJSONFilename := flag.String("story", "gopher.json", "the json file that contain the story")
+	var (
+		flagStoryJSONFilename = flag.String("story", "gopher.json", "The path to the JSON for the story to render")
+		flagHTTP              = flag.Bool("http", false, "Run as a web server")
+	)
 	flag.Parse()
 
 	f, err := os.Open(*flagStoryJSONFilename)
@@ -35,12 +39,16 @@ func main() {
 		return
 	}
 
-	fmt.Printf("server is up and running 8080...\n")
-	mux := newStoryMux(story)
-	if err := http.ListenAndServe(":8080", mux); err != nil {
-		fmt.Printf("failed to serve: %v", err)
-		return
+	if *flagHTTP {
+		fmt.Printf("server is up and running 8080...\n")
+		mux := newStoryMux(story)
+		if err := http.ListenAndServe(":8080", mux); err != nil {
+			fmt.Printf("failed to serve: %v", err)
+			return
+		}
 	}
+
+	runAsCmd(story)
 }
 
 type StoryMux struct {
@@ -74,4 +82,31 @@ func (m *StoryMux) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+}
+
+func runAsCmd(story Story) {
+	arc := story["intro"]
+	tmpl := texttemplate.Must(texttemplate.ParseFiles("arc.txt"))
+
+	for {
+		tmpl.Execute(os.Stdout, arc)
+		if len(arc.Options) == 0 {
+			break
+		}
+		fmt.Printf("Choice: ")
+		var choice int
+		for {
+			if _, err := fmt.Scanf("%d\n", &choice); err != nil {
+				fmt.Printf("Failed to scan: %v", err)
+				return
+			}
+			if choice < 0 || choice >= len(arc.Options) {
+				fmt.Printf("Invalid choice: %d. Allowed [0-%d]: ", choice, len(arc.Options)-1)
+				continue
+			}
+			break
+		}
+		arcName := arc.Options[choice].Arc
+		arc = story[arcName]
+	}
 }
