@@ -1,0 +1,22 @@
+mode: set
+link/main.go:18.13,23.16 4 0
+link/main.go:23.16,25.3 1 0
+link/main.go:26.2,29.16 3 0
+link/main.go:29.16,31.3 1 0
+link/main.go:33.2,35.20 3 0
+link/main.go:35.20,37.3 1 0
+link/main.go:40.39,44.2 3 1
+link/main.go:46.51,47.29 1 1
+link/main.go:47.29,49.3 1 1
+link/main.go:50.2,50.53 1 1
+link/main.go:50.53,52.3 1 1
+link/main.go:55.39,56.30 1 1
+link/main.go:56.30,57.25 1 1
+link/main.go:57.25,59.4 1 1
+link/main.go:61.2,61.11 1 1
+link/main.go:64.52,66.49 1 0
+link/main.go:66.49,69.3 2 0
+link/main.go:72.2,72.53 1 0
+link/main.go:72.53,74.3 1 0
+link/main.go:77.2,77.21 1 0
+link/main.go:77.21,79.3 1 0

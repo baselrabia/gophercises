@@ -37,6 +37,11 @@ func (ts *TestSuite) TestExtractHref() {
 			href: "/login",
 		},
 		{
+			name: "valid a element",
+			a:    `<a class="login">Login</a> `,
+			href: "",
+		},
+		{
 			name: "missing a element",
 			a:    `<a>Login</a> `,
 			href: "",
@@ -68,6 +73,11 @@ func (ts *TestSuite) TestExtractText() {
 			name: "valid nested element",
 			a:    `<a href="/login">Login as <strong>Admin</strong></a> `,
 			text: "Login as Admin",
+		},
+		{
+			name: "valid with comment",
+			a:    `<a href="/login">Login <!-- This is a comment --></a> `,
+			text: "Login",
 		},
 		{
 			name: "missing a element",
