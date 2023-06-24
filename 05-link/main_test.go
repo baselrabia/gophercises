@@ -52,3 +52,36 @@ func (ts *TestSuite) TestExtractHref() {
 
 	}
 }
+
+func (ts *TestSuite) TestExtractText() {
+	cases := []struct {
+		name string
+		a    string
+		text string
+	}{
+		{
+			name: "valid a element",
+			a:    `<a href="/login">Login</a> `,
+			text: "Login",
+		},
+		{
+			name: "valid nested element",
+			a:    `<a href="/login">Login as <strong>Admin</strong></a> `,
+			text: "Login as Admin",
+		},
+		{
+			name: "missing a element",
+			a:    `<a href="/login"></a>`,
+			text: "",
+		},
+	}
+
+	for _, c := range cases {
+		ts.Run(c.name, func() {
+			a := ts.parse(c.a)
+			text := extractText(a)
+			assert.Equal(ts.T(), text, c.text)
+		})
+
+	}
+}
