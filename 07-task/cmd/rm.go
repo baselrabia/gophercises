@@ -10,12 +10,12 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(DoCmd)
+	rootCmd.AddCommand(rmCmd)
 }
 
-var DoCmd = &cobra.Command{
-	Use:   "do",
-	Short: "Mark a taskModel on your TODO list as complete",
+var rmCmd = &cobra.Command{
+	Use:   "rm",
+	Short: "remove a taskModel on your TODO list",
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			behelper.Exitf("Missing taskModel ID\n")
@@ -25,9 +25,9 @@ var DoCmd = &cobra.Command{
 			behelper.Exitf("%v\n", err)
 		}
 		task := taskModel.Task{ID: id}
-		if err := taskModel.CompleteTask(&task); err != nil {
+		if err := taskModel.RemoveTask(&task); err != nil {
 			behelper.Exitf("%v\n", err)
 		}
-		fmt.Printf("You have completed the %q taskModel.\n", task.Details)
+		fmt.Printf("You have removed the %q taskModel.\n", task.Details)
 	},
 }

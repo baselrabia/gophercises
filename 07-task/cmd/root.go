@@ -7,7 +7,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "task",
+	Use:   "taskModel",
 	Short: "Task is a very fast static site generator",
 }
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"task/behelper"
-	"task/data"
+	"task/data/taskModel"
 )
 
 func init() {
@@ -15,7 +15,7 @@ var ListCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List all of your incomplete tasks",
 	Run: func(cmd *cobra.Command, _ []string) {
-		tasks, err := data.ListTasks(false)
+		tasks, err := taskModel.ListTasks(false)
 		if err != nil {
 			behelper.Exitf("%v", err)
 		}

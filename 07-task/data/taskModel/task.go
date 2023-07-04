@@ -1,4 +1,4 @@
-package data
+package taskModel
 
 import (
 	"encoding/json"
@@ -78,7 +78,7 @@ func CompleteTask(taskDTO *Task) error {
 
 		task := b.Get(behelper.Itob(taskDTO.ID))
 		if task == nil {
-			return fmt.Errorf("task not found with ID=%d", taskDTO.ID)
+			return fmt.Errorf("taskModel not found with ID=%d", taskDTO.ID)
 		}
 		if err := json.Unmarshal(task, taskDTO); err != nil {
 			return err
@@ -89,5 +89,24 @@ func CompleteTask(taskDTO *Task) error {
 			return err
 		}
 		return b.Put(behelper.Itob(taskDTO.ID), task)
+	})
+}
+
+func RemoveTask(taskDTO *Task) error {
+	db, err := bolt.Connection()
+	if err != nil {
+		return err
+	}
+	return db.Update(func(tx *bbolt.Tx) error {
+		b := tx.Bucket(tasksBucketName)
+
+		task := b.Get(behelper.Itob(taskDTO.ID))
+		if task == nil {
+			return fmt.Errorf("taskModel not found with ID=%d", taskDTO.ID)
+		}
+		if err := json.Unmarshal(task, taskDTO); err != nil {
+			return err
+		}
+		return b.DeleteBucket(behelper.Itob(taskDTO.ID))
 	})
 }
